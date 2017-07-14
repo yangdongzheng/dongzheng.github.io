@@ -55,9 +55,9 @@
       </nav>
       <nav id="sub-nav">
         
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="Flux RSS"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Rechercher"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://xiaoxuetu.github.io"></form>
@@ -67,6 +67,66 @@
 </header>
       <div class="outer">
         <section id="main">
+  
+    <article id="post-introduce-javascriptcore" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/07/14/introduce-javascriptcore/" class="article-date">
+  <time datetime="2017-07-14T14:11:19.000Z" itemprop="datePublished">2017-07-14</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/07/14/introduce-javascriptcore/">手把手教你OC与JS相互调用</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>这是一篇关于动态化方案的文章，通过这篇文章我们会了解一下姿势点</p>
+<font color="#FFA500" size="5">JavaScriptCore框架</font>
+
+<p>   JavaScriptCore框架其实就是基于webkit中以C/C++实现的JavaScriptCore的一个包装，JavaScriptCore框架在OS X平台上很早就存在的，之前接口也是纯C语言的。可能是苹果发现越来越多的程序使用了自编译的JavaScriptCore，干脆做个顺水人情将JavaScriptCore框架开放了，同时还提供了Objective-C的封装接口。</p>
+<p><font color="#FFA500" size="5">OC调用JS，多说无益，直接上代码</font></p>
+<pre><code class="bash">JSContext *context = [[JSContext alloc] init];
+JSValue *result = [context evaluateScript:@<span class="string">"2 + 2"</span>];
+NSLog(@<span class="string">"2 + 2 = %d"</span>, [result toInt32]);
+</code></pre>
+<p><font color="#FFA500" size="5">JS调用OC</font></p>
+<pre><code class="bash">JSContext *context = [[JSContext alloc] init];
+context[@<span class="string">"pushViewController"</span>] = ^(NSString *controllerName, NSString *title) {
+    Class class = NSClassFromString(controllerName);
+    UIViewController *controller = [class new];
+    controller.title = title;
+    [self.navigationController pushViewController:controller animated:YES];
+};
+[context evaluateScript:@<span class="string">"pushViewController('JSPushViewController', 'JSPUSH')"</span>];
+</code></pre>
+<p><font color="#FFA500" size="5">JSContext介绍</font><br>JSContext 是JS代码的执行环境<br>JSContext 为JS代码的执行提供了上下文环境，通过jSCore执行的JS代码都得通过JSContext来执行。<br>JSContext对应于一个 JS 中的全局对象<br>JSContext对应着一个全局对象，相当于浏览器中的window对象，JSContext中有一个GlobalObject属性，<br>实际上JS代码都是在这个GlobalObject上执行的，但是为了容易理解，可以把JSContext等价于全局对象。</p>
+<p><font color="#FFA500" size="5">JSValue介绍</font><br>JSValue 是对 JS 值的包装<br>JSValue 顾名思义，就是JS值嘛，但是JS中的值拿到OC中是不能直接用的，需要包装一下，<br>这个JSValue就是对JS值的包装，一个JSValue对应着一个JS值，这个JS值可能是JS中的number，boolean等基本类型，也可能是对象，函数，甚至可以是undefined，或者null。<br>JSValue存在于JSContext中<br>JSValue是不能独立存在的，它必须存在于某一个JSContext中，就像浏览器中所有的元素都包含于Window对象中一样，一个JSContext中可以包含多个JSValue。<br>都是强引用<br>这点很关键，JSValue对其对应的JS值和其所属的JSContext对象都是强引用的关系。因为jSValue需要这两个东西来执行JS代码，所以JSValue会一直持有着它们。</p>
+<h5 id="4-OC-Runtime"><a href="#4-OC-Runtime" class="headerlink" title="4.OC Runtime"></a>4.OC Runtime</h5><p><a href="http://blog.csdn.net/testcs_dn/article/details/45719357/" target="_blank" rel="external">MarkDown设置字体颜色</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://xiaoxuetu.github.io/2017/07/14/introduce-javascriptcore/" data-id="cj53ykqwi000001k3muu0him3" class="article-share-link">Partager</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScriptCore-OC与JS交互，JSPatch原理解析/">JavaScriptCore, OC与JS交互，JSPatch原理解析</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
   
     <article id="post-hello-hexo" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -152,7 +212,7 @@ themes
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://xiaoxuetu.github.io/2017/07/02/hello-hexo/" data-id="cj4merpxt0000otk3q0k1qx8t" class="article-share-link">Share</a>
+      <a data-url="http://xiaoxuetu.github.io/2017/07/02/hello-hexo/" data-id="cj53yer1g0000zxk33lc445x2" class="article-share-link">Partager</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/个人博客搭建、Mac、GitHub/">个人博客搭建、Mac、GitHub</a></li></ul>
@@ -190,7 +250,7 @@ themes
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://xiaoxuetu.github.io/2017/07/02/hello-world/" data-id="cj4merpy30001otk3m1qzmade" class="article-share-link">Share</a>
+      <a data-url="http://xiaoxuetu.github.io/2017/07/02/hello-world/" data-id="cj53yer1p0001zxk3lwnowepk" class="article-share-link">Partager</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/个人简介/">个人简介</a></li></ul>
@@ -212,9 +272,9 @@ themes
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Tags</h3>
+    <h3 class="widget-title">Mot-clés</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/个人博客搭建、Mac、GitHub/">个人博客搭建、Mac、GitHub</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/个人简介/">个人简介</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScriptCore-OC与JS交互，JSPatch原理解析/">JavaScriptCore, OC与JS交互，JSPatch原理解析</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/个人博客搭建、Mac、GitHub/">个人博客搭建、Mac、GitHub</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/个人简介/">个人简介</a></li></ul>
     </div>
   </div>
 
@@ -222,9 +282,9 @@ themes
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Tag Cloud</h3>
+    <h3 class="widget-title">Nuage de mot-clés</h3>
     <div class="widget tagcloud">
-      <a href="/tags/个人博客搭建、Mac、GitHub/" style="font-size: 10px;">个人博客搭建、Mac、GitHub</a> <a href="/tags/个人简介/" style="font-size: 10px;">个人简介</a>
+      <a href="/tags/JavaScriptCore-OC与JS交互，JSPatch原理解析/" style="font-size: 10px;">JavaScriptCore, OC与JS交互，JSPatch原理解析</a> <a href="/tags/个人博客搭建、Mac、GitHub/" style="font-size: 10px;">个人博客搭建、Mac、GitHub</a> <a href="/tags/个人简介/" style="font-size: 10px;">个人简介</a>
     </div>
   </div>
 
@@ -241,9 +301,13 @@ themes
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
+    <h3 class="widget-title">Articles récents</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2017/07/14/introduce-javascriptcore/">手把手教你OC与JS相互调用</a>
+          </li>
         
           <li>
             <a href="/2017/07/02/hello-hexo/">手把手教你搭建Mac上基于GitHub的Hexo博客</a>
@@ -266,7 +330,7 @@ themes
   <div class="outer">
     <div id="footer-info" class="inner">
       &copy; 2017 杨东正<br>
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      Propulsé by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
 </footer>
